@@ -58,7 +58,7 @@ In the build configuration screen:
 | **Production branch** | `main` |
 | **Framework preset** | `None` |
 | **Build command** | `npm run build` |
-| **Build output directory** | `.` (a single dot for the root directory) |
+| **Build output directory** | `dist` |
 
 ---
 

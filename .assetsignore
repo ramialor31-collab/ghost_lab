@@ -1,0 +1,20 @@
+# Cloudflare Pages / Workers Asset Exclusion Rules
+# Prevents node_modules and development artifacts from ever being uploaded
+
+node_modules/
+.git/
+.env*
+*.log
+.dart_tool/
+.idea/
+build/
+lib/
+test/
+*.md
+server.js
+build.js
+test_*.js
+package*.json
+pubspec*
+analysis_options.yaml
+ghost_lab.iml
