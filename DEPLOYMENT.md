@@ -71,6 +71,9 @@ Scroll down to **Environment variables (advanced)** and click **Add variable**:
 | `SUPABASE_URL` | `https://lqkjaflazvekmrwwiqhk.supabase.co` |
 | `SUPABASE_ANON_KEY` | `sb_publishable_bmzYqGgHCjSJlyV1hiQZGw_DNonpMfd` |
 
+> [!TIP]
+> Make sure the variables are added under **Production** (and optionally **Preview** if deploying preview branches). Cloudflare Pages Functions (`functions/api/config.js`) will read these variables securely at runtime whenever visitors access your site or dashboard. The build step (`npm run build`) does not require database access.
+
 Click **Save and Deploy**.
 
 ---
