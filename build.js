@@ -57,7 +57,7 @@ function getDirStats(dir) {
 }
 
 console.log('==================================================');
-console.log('GHOST LAB — Production Build (Cloudflare Pages)');
+console.log('GHOST LAB — Production Build (Cloudflare Worker)');
 console.log('==================================================\n');
 
 const ROOT_DIR = __dirname;
@@ -114,17 +114,26 @@ console.log(`ℹ Total bundle size: ${totalMb} MiB`);
 console.log(`ℹ Largest single asset: ${maxFileMb} MiB`);
 
 assert(stats.maxFileSize < 20 * 1024 * 1024, `All assets are well under Cloudflare's 25 MiB limit (max: ${maxFileMb} MiB)`);
-console.log('✅ PASS: dist/ bundle is lightweight and ready for Cloudflare Pages deployment.');
+console.log('✅ PASS: dist/ bundle is lightweight and ready for Cloudflare Workers deployment.');
 
-// Step 4: Verify Cloudflare Pages Function (functions/ at repository root)
-console.log('\n4. Verifying Cloudflare Pages Functions & edge API...');
+// Step 4: Verify Cloudflare Worker Configuration & Entrypoint
+console.log('\n4. Verifying Cloudflare Worker configuration & entrypoints...');
+const wranglerPath = path.join(ROOT_DIR, 'wrangler.toml');
+assert(fs.existsSync(wranglerPath), 'wrangler.toml exists');
+const wranglerContent = fs.readFileSync(wranglerPath, 'utf8');
+assert(!wranglerContent.includes('pages_build_output_dir'), 'wrangler.toml does NOT contain pages_build_output_dir');
+assert(wranglerContent.includes('main = "worker.js"'), 'wrangler.toml sets main = "worker.js"');
+assert(wranglerContent.includes('directory = "./dist"'), 'wrangler.toml sets assets directory = "./dist"');
+
+const workerPath = path.join(ROOT_DIR, 'worker.js');
+assert(fs.existsSync(workerPath), 'worker.js exists');
+const workerContent = fs.readFileSync(workerPath, 'utf8');
+assert(workerContent.includes('/api/config'), 'worker.js handles /api/config endpoint');
+assert(workerContent.includes('env.SUPABASE_URL'), 'worker.js references env.SUPABASE_URL');
+assert(workerContent.includes('env.SUPABASE_ANON_KEY'), 'worker.js references env.SUPABASE_ANON_KEY');
+
 const cfFuncPath = path.join(ROOT_DIR, 'functions', 'api', 'config.js');
-assert(fs.existsSync(cfFuncPath), 'functions/api/config.js exists at repository root');
-
-const cfContent = fs.readFileSync(cfFuncPath, 'utf8');
-assert(cfContent.includes('onRequest'), 'Cloudflare Pages Function exports onRequest');
-assert(cfContent.includes('env.SUPABASE_URL'), 'Function references env.SUPABASE_URL');
-assert(cfContent.includes('env.SUPABASE_ANON_KEY'), 'Function references env.SUPABASE_ANON_KEY');
+assert(fs.existsSync(cfFuncPath), 'functions/api/config.js is preserved');
 
 // Step 5: Test Product Card availability contract logic
 console.log('\n5. Verifying component availability logic...');

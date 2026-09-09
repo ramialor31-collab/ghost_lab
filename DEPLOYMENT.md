@@ -1,50 +1,56 @@
 # GHOST LAB — Production Public Deployment Guide
 
-This guide provides step-by-step instructions for deploying the **GHOST LAB** (`@ghost.lab1`) website publicly to **Cloudflare Pages** (recommended) or **Vercel** for free.
+This guide provides step-by-step instructions for deploying the **GHOST LAB** (`@ghost.lab1`) website publicly to **Cloudflare Workers** (with Static Assets) or **Vercel** for free.
 
 ---
 
 ## ⚡ Quick Architecture Overview
 
-* **Frontend**: Pure Vanilla HTML, CSS, and ES Modules. No heavy bundle or transpilation needed.
+* **Frontend**: Pure Vanilla HTML, CSS, and ES Modules compiled into `dist/`. No heavy bundle or transpilation needed.
 * **Routing**: Client-side hash routing (`#/`, `#/shop`, `#/product/:id`, `#/admin`).
 * **Database & Auth**: Supabase (`products` table, `product-images` bucket, Supabase Auth).
 * **API Configuration (`/api/config`)**:
-  * **Cloudflare Pages**: Automatically handled at the edge by `functions/api/config.js`.
-  * **Vercel**: Automatically handled by `api/config.js`.
+  * **Cloudflare Worker**: Handled by `worker.js` with `run_worker_first = ["/api/*"]`.
+  * **Cloudflare Pages**: Preserved via `functions/api/config.js`.
+  * **Vercel**: Preserved via `api/config.js`.
   * **Local Development**: Handled by `server.js` (`npm run dev`).
-* **Security**: `.env` is ignored by Git and never committed. Your Supabase anon key is safely supplied via your hosting dashboard environment variables.
+* **Security**: `.env` is ignored by Git and never committed. Your Supabase anon key is safely supplied via your Cloudflare dashboard environment variables.
 
 ---
 
-## Option 1: Cloudflare Pages (Recommended)
+## Option 1: Cloudflare Workers (Configured in `wrangler.toml`)
 
-Cloudflare Pages provides unlimited free bandwidth, high-speed worldwide CDN caching, and built-in edge functions.
+The repository includes `wrangler.toml` configured to serve static assets from `./dist` and route `/api/*` requests to `worker.js`.
 
 ### Step 1: Push Project to GitHub
 
-If you haven't initialized a Git repository yet, run in your terminal:
+If pushing your changes, run:
 
 ```bash
-git init
 git add .
-git commit -m "feat: production ready GHOST LAB streetwear website"
-git branch -M main
-git remote add origin https://github.com/<your-username>/<your-repo-name>.git
-git push -u origin main
+git commit -m "feat: configure Cloudflare Worker deployment"
+git push origin main
 ```
 
 *(Note: `.env` is in `.gitignore` and will NOT be pushed to GitHub, keeping your local configuration private).*
 
 ---
 
-### Step 2: Create a Cloudflare Pages Project
+### Step 2: Configure Cloudflare Worker Project
 
-1. Log in to your [Cloudflare Dashboard](https://dash.cloudflare.com/).
-2. In the left navigation, click **Workers & Pages**.
-3. Click **Create Application** → select the **Pages** tab → click **Connect to Git**.
-4. Authorize GitHub and select your `ghost_lab` repository.
-5. Click **Begin setup**.
+In your Cloudflare Dashboard:
+1. Go to **Workers & Pages** → select your `ghost-lab` Worker project.
+2. In **Settings → Variables and Secrets**, add the following environment variables:
+
+| Variable Name | Value |
+|---|---|
+| `SUPABASE_URL` | `https://lqkjaflazvekmrwwiqhk.supabase.co` |
+| `SUPABASE_ANON_KEY` | `sb_publishable_bmzYqGgHCjSJlyV1hiQZGw_DNonpMfd` |
+
+3. If deploying via Git integration or `wrangler deploy`:
+   * **Build command**: `npm run build`
+   * The build compiles production assets into `dist/` (total size ~6 MiB, well below the 25 MiB limit).
+   * Static assets are served from `dist/` and `/api/config` is handled by `worker.js`.
 
 ---
 
