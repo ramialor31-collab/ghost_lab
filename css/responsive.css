@@ -1,0 +1,208 @@
+/* ==========================================================================
+   RESPONSIVE STYLES
+   ========================================================================== */
+
+/* Max Width 1024px (Tablets & Small Laptops) */
+@media (max-width: 1024px) {
+  :root {
+    --nav-height: var(--nav-height-mobile);
+  }
+
+  .nav-desktop-links,
+  .nav-social-link {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .product-detail-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .atelier-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .atelier-media {
+    min-height: 340px;
+  }
+
+  .atelier-content {
+    padding: var(--space-xl);
+  }
+
+  .about-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .about-values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .custom-workflow-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .technique-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .builder-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .builder-summary-box {
+    grid-column: span 1;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+  }
+}
+
+/* Max Width 768px (Mobile Devices) */
+@media (max-width: 768px) {
+  :root {
+    --space-4xl: 56px;
+    --space-3xl: 44px;
+    --space-2xl: 32px;
+  }
+
+  .container,
+  .container-narrow {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+
+  .hero-section {
+    min-height: calc(100vh - var(--nav-height-mobile));
+    padding-top: var(--space-xl);
+  }
+
+  .hero-title {
+    font-size: 2.6rem;
+  }
+
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md) var(--space-sm);
+  }
+
+  .product-info {
+    padding: 10px 10px 14px;
+  }
+
+  .product-name {
+    font-size: 0.88rem;
+  }
+
+  .product-price {
+    font-size: 1rem;
+  }
+
+  .product-quick-view {
+    display: none; /* Keep mobile tap direct */
+  }
+
+  .insta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .whatsapp-cta-banner {
+    padding: var(--space-xl) var(--space-md);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .whatsapp-cta-banner .btn {
+    width: 100%;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--space-sm);
+    text-align: center;
+  }
+
+  .shop-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-pills {
+    overflow-x: auto;
+    padding-bottom: 6px;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-btn {
+    flex-shrink: 0;
+  }
+
+  .shop-sort-wrap {
+    justify-content: space-between;
+  }
+
+  .custom-workflow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .atelier-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Max Width 375px (Compact Mobile) */
+@media (max-width: 375px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-media {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* High-res / Ultrawide screens */
+@media (min-width: 1440px) {
+  .hero-content {
+    max-width: 960px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

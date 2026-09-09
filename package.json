@@ -1,0 +1,24 @@
+{
+  "name": "ghost-lab-streetwear",
+  "version": "1.0.0",
+  "description": "GHOST LAB — Premium Streetwear & Custom Clothing Website (Algeria)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node test_e2e_flow.js"
+  },
+  "keywords": [
+    "streetwear",
+    "algeria",
+    "embroidery",
+    "clothing",
+    "ghost-lab"
+  ],
+  "author": "GHOST LAB",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "dotenv": "^17.4.2"
+  }
+}
