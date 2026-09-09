@@ -97,6 +97,9 @@ const assetsIgnoreSrc = path.join(ROOT_DIR, '.assetsignore');
 if (fs.existsSync(assetsIgnoreSrc)) {
   fs.copyFileSync(assetsIgnoreSrc, path.join(DIST_DIR, '.assetsignore'));
 }
+// Generate 200.html as standard Cloudflare SPA fallback
+fs.copyFileSync(path.join(ROOT_DIR, 'index.html'), path.join(DIST_DIR, '200.html'));
+assert(fs.existsSync(path.join(DIST_DIR, '200.html')), 'Generated dist/200.html for Cloudflare SPA fallback');
 
 console.log('✅ Web assets successfully assembled in dist/');
 
@@ -124,6 +127,30 @@ const wranglerContent = fs.readFileSync(wranglerPath, 'utf8');
 assert(!wranglerContent.includes('pages_build_output_dir'), 'wrangler.toml does NOT contain pages_build_output_dir');
 assert(wranglerContent.includes('main = "worker.js"'), 'wrangler.toml sets main = "worker.js"');
 assert(wranglerContent.includes('directory = "./dist"'), 'wrangler.toml sets assets directory = "./dist"');
+
+assert(wranglerContent.includes('not_found_handling = "single-page-application"'), 'wrangler.toml enables single-page-application routing');
+assert(wranglerContent.includes('run_worker_first = ["/api/*"]'), 'wrangler.toml routes /api/* to worker.js');
+
+// Verify _redirects rules are valid and do not cause infinite loops
+const distRedirectsPath = path.join(DIST_DIR, '_redirects');
+assert(fs.existsSync(distRedirectsPath), 'dist/_redirects exists');
+const redirectsContent = fs.readFileSync(distRedirectsPath, 'utf8');
+const redirectLines = redirectsContent.split('\n');
+for (let i = 0; i < redirectLines.length; i++) {
+  const line = redirectLines[i].trim();
+  if (!line || line.startsWith('#')) continue;
+  const parts = line.split(/\s+/);
+  if (parts.length >= 2) {
+    const src = parts[0];
+    const dest = parts[1];
+    const code = parts[2] || '302';
+    if (code === '200' && src === '/*' && (dest === '/index.html' || dest === '/200.html')) {
+      assert(false, `Infinite loop detected in _redirects line ${i + 1}: "${line}"`);
+    }
+  }
+}
+assert(!redirectsContent.includes('/*      /index.html  200'), '_redirects does not contain circular /* /index.html 200 rewrite rule');
+console.log('✅ PASS: _redirects has no infinite loops; SPA routing handled by wrangler.toml single-page-application & 200.html');
 
 const workerPath = path.join(ROOT_DIR, 'worker.js');
 assert(fs.existsSync(workerPath), 'worker.js exists');

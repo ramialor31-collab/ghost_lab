@@ -1,3 +1,6 @@
-# Cloudflare Pages Redirects & SPA Routing Rules
-/api/*  /api/:splat  200
-/*      /index.html  200
+# Cloudflare Workers Static Assets Redirects
+# SPA routing is handled natively via wrangler.toml:
+#   [assets] not_found_handling = "single-page-application"
+# and 200.html fallback.
+# API endpoints are routed directly to worker.js:
+#   [assets] run_worker_first = ["/api/*"]
