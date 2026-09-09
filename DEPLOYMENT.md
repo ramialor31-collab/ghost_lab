@@ -62,9 +62,8 @@ In the build configuration screen:
 |---|---|
 | **Project name** | `ghost-lab` (or your preferred name) |
 | **Production branch** | `main` |
-| **Framework preset** | `None` |
 | **Build command** | `npm run build` |
-| **Build output directory** | `dist` |
+| **Deploy command** (if requested) | `npx wrangler deploy worker.js --assets ./dist` |
 
 ---
 

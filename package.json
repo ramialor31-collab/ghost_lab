@@ -2,11 +2,12 @@
   "name": "ghost-lab-streetwear",
   "version": "1.0.0",
   "description": "GHOST LAB — Premium Streetwear & Custom Clothing Website (Algeria)",
-  "main": "server.js",
+  "main": "worker.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "node build.js"
+    "build": "node build.js",
+    "deploy": "wrangler deploy worker.js --assets ./dist"
   },
   "keywords": [
     "streetwear",
