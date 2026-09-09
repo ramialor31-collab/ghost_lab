@@ -1,13 +1,6 @@
-# Cloudflare Configuration for GHOST LAB
+# Cloudflare Pages Configuration for GHOST LAB
 name = "ghost-lab"
 compatibility_date = "2024-09-01"
 
-# Cloudflare Pages Build Output Configuration
+# Cloudflare Pages Build Output Directory
 pages_build_output_dir = "dist"
-
-# Cloudflare Workers Static Assets Configuration (if deployed via wrangler deploy)
-[assets]
-directory = "./dist"
-binding = "ASSETS"
-not_found_handling = "single-page-application"
-run_worker_first = false
